@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Restaurant Billing</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="auth.js"></script>
+  <script>if(typeof requireAuth==='function'){ requireAuth(); }</script>
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <h1>Restaurant Billing</h1>
+      <p class="subtitle">Quick POS — add items, calculate totals, print receipt</p>
+    </div>
+    <div class="header-controls">
+      <div id="user-name" class="user-name">Guest</div>
+      <div class="bg-controls">
+        <input id="bg-upload" type="file" accept="image/*" style="display:none">
+        <button id="bg-change" title="Change background">Change BG</button>
+        <button id="bg-seturl" title="Set background from URL">Set BG URL</button>
+        <button id="bg-clear" title="Clear background">Clear BG</button>
+      </div>
+      <button id="logout-btn" class="logout">Logout</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="menu">
+      <h2>Menu</h2>
+      <div id="menu-list" class="menu-list"></div>
+      <div class="custom-item">
+        <input id="custom-name" placeholder="Item name">
+        <input id="custom-price" placeholder="Price" type="number" min="0" step="0.01">
+        <button id="add-custom">Add to Menu</button>
+      </div>
+    </section>
+
+    <section class="order">
+      <h2>Order</h2>
+      <table id="order-table">
+        <thead>
+          <tr><th>Item</th><th>Price</th><th>Qty</th><th>Total</th><th></th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <div class="summary">
+        <div>Subtotal: <span id="subtotal">0.00</span></div>
+        <div>Tax (5%): <span id="tax">0.00</span></div>
+        <div>Service (5%): <span id="service">0.00</span></div>
+        <div>Discount: <input id="discount" type="number" min="0" step="0.01" value="0"></div>
+        <div class="total-row">Total: <strong id="total">0.00</strong></div>
+      </div>
+
+      <div class="payment">
+        <label>Payment Amount: <input id="payment" type="number" min="0" step="0.01"></label>
+        <div>Change: <span id="change">0.00</span></div>
+        <div class="qr-area">
+          <div class="qr-title">Scan to pay</div>
+          <img id="qr-preview" alt="Payment QR" src="" style="display:none">
+          <div style="display:flex;gap:8px;margin-top:6px;align-items:center">
+            <input id="qr-upload" type="file" accept="image/*">
+            <button id="clear-qr">Clear QR</button>
+            <button id="open-qr">Open QR</button>
+          </div>
+        </div>
+        <div class="actions">
+          <button id="clear-order">Clear</button>
+          <button id="print-receipt">Print Receipt</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <small>Built for local billing demo</small>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
