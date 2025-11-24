@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Create account — Restaurant Billing</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body{display:flex;align-items:center;justify-content:center;height:100vh;background:#0f1724;color:#e6eef8}
+    .card{background:#081124;padding:20px;border-radius:8px;box-shadow:0 6px 22px rgba(0,0,0,0.6);width:360px;border:1px solid rgba(255,255,255,0.03)}
+    .card input{width:100%;padding:8px;margin:8px 0;border:1px solid rgba(255,255,255,0.04);border-radius:6px;background:#0b1220;color:#e6eef8}
+    .err{color:#ff6b6b}
+    a{color:#93c5fd}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Create account</h2>
+    <form id="reg-form">
+      <input id="user" placeholder="Username" required>
+      <input id="pass" placeholder="Password" type="password" required>
+      <input id="pass2" placeholder="Confirm password" type="password" required>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+        <button type="submit">Create</button>
+        <a href="login.html" style="margin-left:auto;color:#666;align-self:center">Back to login</a>
+      </div>
+      <div id="err" class="err" role="alert" aria-live="assertive"></div>
+    </form>
+  </div>
+
+  <script src="auth.js"></script>
+  <script>
+    const form = document.getElementById('reg-form');
+    const err = document.getElementById('err');
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      err.textContent = '';
+      const u = document.getElementById('user').value.trim();
+      const p = document.getElementById('pass').value;
+      const p2 = document.getElementById('pass2').value;
+      if(!u || !p){ err.textContent = 'Enter username and password'; return; }
+      if(p !== p2){ err.textContent = 'Passwords do not match'; return; }
+      try{
+        await registerUser(u,p);
+        // auto-login
+        localStorage.setItem('rb_token','logged-in');
+        localStorage.setItem('rb_user', u);
+        window.location.href = 'index.html';
+      } catch(ex){ err.textContent = ex.message || 'Failed to register'; }
+    });
+    if(isAuthenticated()) window.location.href = 'index.html';
+  </script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Login — Restaurant Billing</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body{display:flex;align-items:center;justify-content:center;height:100vh;background:#0f1724;color:#e6eef8}
+    .login-card{background:#081124;padding:24px;border-radius:8px;box-shadow:0 6px 22px rgba(0,0,0,0.6);width:320px;border:1px solid rgba(255,255,255,0.03)}
+    .login-card h2{margin-top:0;color:#e6eef8}
+    .login-card input{width:100%;padding:8px;margin:8px 0;border:1px solid rgba(255,255,255,0.04);border-radius:6px;background:#0b1220;color:#e6eef8}
+    .login-card .err{color:#ff6b6b}
+    a{color:#93c5fd}
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <h2>Sign in</h2>
+    <form id="login-form">
+      <input id="username" placeholder="Username" autocomplete="username" required>
+      <input id="password" placeholder="Password" type="password" autocomplete="current-password" required>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+        <button type="submit">Login</button>
+        <div style="margin-left:auto;font-size:0.9rem;color:#666">Demo: admin / 1234</div>
+      </div>
+      <div id="err" class="err" role="alert" aria-live="assertive"></div>
+    </form>
+  </div>
+
+  <script src="auth.js"></script>
+  <script>
+    const form = document.getElementById('login-form');
+    const err = document.getElementById('err');
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      err.textContent = '';
+      const u = document.getElementById('username').value.trim();
+      const p = document.getElementById('password').value;
+      try{
+        const ok = await authenticate(u,p);
+        if(ok){
+          localStorage.setItem('rb_token','logged-in');
+          localStorage.setItem('rb_user', u);
+          window.location.href = 'index.html';
+        } else {
+          err.textContent = 'Invalid username or password';
+        }
+      } catch(ex){ err.textContent = 'An error occurred'; }
+    });
+    // If already logged in, go to index
+    if(isAuthenticated()) window.location.href = 'index.html';
+  </script>
+  <div style="text-align:center;margin-top:12px">
+    <a href="register.html">Create a new account</a>
+  </div>
+</body>
+</html>
